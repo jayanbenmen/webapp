@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+    {% if user.is_authenticated %}
+        <p>Welcome, Admin {{ user.first_name }}!</p>
+    {% else %}
+        <p>Welcome, Guest!</p>
+    {% endif %}
+
+    <span><a href = "{% url 'adminrooms' %}">Rooms</a></span><br>
+    <span><a href = "{% url 'admincourses' %}">Courses</a></span><br>
+    <span><a href = "{% url 'admin:index' %}" target="_blank">Admin Hub</a></span><br>
+    <br>
+    <span><a href = "{% url 'logout' %}">Logout</a></span>
+</body>
+</html>

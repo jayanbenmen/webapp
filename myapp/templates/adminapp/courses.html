@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Courses</title>
+</head>
+<body>
+    <h1>Courses</h1>
+    <ul>
+        {% for course in courses %}
+            <li>
+                <a href="{% url 'courseattendance' course.course_id %}">{{ course.course_code }} {{ course.section }}</a>
+            </li>
+        {% empty %}
+            <li>No courses available.</li>
+        {% endfor %}
+    </ul><br>
+    <span><a href = "{% url 'addcourse' %}">Add a Course</a></span><br>
+    <span><a href = "{% url 'deletecourse' %}">Delete a Course</a></span><br>
+    <br>
+    <span><a href = "{% url 'adminrooms' %}">Rooms</a></span><br>
+    <span><a href = "{% url 'admincourses' %}">Courses</a></span><br>
+    <span><a href = "{% url 'admin:index' %}" target="_blank">Admin Hub</a></span><br>
+    <br>
+    <span><a href = "{% url 'logout' %}">Logout</a></span>
+</body>
+</html>

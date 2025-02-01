@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add a Student</title>
+</head>
+<body>
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == "error" %}
+    <div class="alert alert-danger" role="alert">
+        {{ message }}
+    </div>
+    {% else %}
+    <div class="alert alert-success" role="alert">
+      {{ message }}
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    <h1>Student Adding for {{course.course_title}} {{ course.section }}</h1><br>
+    <form name="register" method="post" novalidate action="">
+        {% csrf_token %}
+        Student ID :<input type = "text" name = "instudentid" value = "" width = "200"><br>
+        <br>
+        <button type="submit">Add Student</button>
+    </form>
+    <br>
+    <span><a href = "{% url 'adminrooms' %}">Rooms</a></span><br>
+    <span><a href = "{% url 'admincourses' %}">Courses</a></span><br>
+    <span><a href = "{% url 'admin:index' %}" target="_blank">Admin Hub</a></span><br>
+    <br>
+    <span><a href = "{% url 'logout' %}">Logout</a></span>
+</body>
+</html>

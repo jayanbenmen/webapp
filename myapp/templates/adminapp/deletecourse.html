@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete a Course</title>
+</head>
+<body>
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == "error" %}
+    <div class="alert alert-danger" role="alert">
+        {{ message }}
+    </div>
+    {% else %}
+    <div class="alert alert-success" role="alert">
+      {{ message }}
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    <h1>Course Deletion</h1>
+    <form name="register" method="post" novalidate action="">
+        {% csrf_token %}
+    <pre>
+        Course Code  :<input type = "text" name = "incoursecode" value = "" width = "200"><br>
+        Section      :<input type = "text" name = "insection" value = "" width = "200"><br>
+    </pre>
+        <br>
+        <button type="submit">Delete</button>
+    </form>
+    <br>
+    <span><a href = "{% url 'adminrooms' %}">Rooms</a></span><br>
+    <span><a href = "{% url 'admincourses' %}">Courses</a></span><br>
+    <span><a href = "{% url 'admin:index' %}" target="_blank">Admin Hub</a></span><br>
+    <br>
+    <span><a href = "{% url 'logout' %}">Logout</a></span>
+</body>
+</html>

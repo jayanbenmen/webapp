@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete a Room</title>
+</head>
+<body>
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == "error" %}
+    <div class="alert alert-danger" role="alert">
+        {{ message }}
+    </div>
+    {% else %}
+    <div class="alert alert-success" role="alert">
+      {{ message }}
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    <h1>Room Deletion</h1>
+    <form name="register" method="post" novalidate action="">
+        {% csrf_token %}
+        Room Name :<input type = "text" name = "inroomname" value = "" width = "200"><br>
+        <br>
+        <button type="submit">Delete</button>
+    </form>
+    <br>
+    <span><a href = "{% url 'adminrooms' %}">Rooms</a></span><br>
+    <span><a href = "{% url 'admincourses' %}">Courses</a></span><br>
+    <span><a href = "{% url 'admin:index' %}" target="_blank">Admin Hub</a></span><br>
+    <br>
+    <span><a href = "{% url 'logout' %}">Logout</a></span>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Registration</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+  <div class="center">
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == "error" %}
+    <div class="alert alert-danger" role="alert">
+      {{ message }}
+    </div>
+    {% else %}
+    <div class="alert alert-success" role="alert">
+      {{ message }}
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    <h1>Admin Registration Form</h1>
+
+    <form name="register" method="post" novalidate action="">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_username">{{ form.username.label }}:</label>
+            {{ form.username }}
+        </div>
+        <div class="form-group">
+            <label for="id_first_name">{{ form.first_name.label }}:</label>
+            {{ form.first_name }}
+        </div>
+        <div class="form-group">
+            <label for="id_last_name">{{ form.last_name.label }}:</label>
+            {{ form.last_name }}
+        </div>
+        <div class="form-group">
+            <label for="id_email">{{ form.email.label }}:</label>
+            {{ form.email }}
+        </div>
+        <div class="form-group">
+            <label for="id_password1">{{ form.password1.label }}:</label>
+            {{ form.password1 }}
+        </div>
+        <div class="form-group">
+            <label for="id_password2">{{ form.password2.label }}:</label>
+            {{ form.password2 }}
+        </div>
+        <button type="submit">Sign Up</button>
+    </form>
+  </div>
+</body>
+</html>

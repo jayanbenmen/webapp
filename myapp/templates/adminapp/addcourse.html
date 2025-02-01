@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add a Course</title>
+</head>
+<body>
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == "error" %}
+    <div class="alert alert-danger" role="alert">
+        {{ message }}
+    </div>
+    {% else %}
+    <div class="alert alert-success" role="alert">
+      {{ message }}
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    <h1>Course Registration</h1>
+    <form name="register" method="post" novalidate action="">
+        {% csrf_token %}
+    <pre>
+        Course Code  :<input type = "text" name = "incoursecode" value = "" width = "200"><br>
+        Course Title :<input type = "text" name = "incoursetitle" value = "" width = "200"><br>
+        Section      :<input type = "text" name = "insection" value = "" width = "200"><br>
+        Start Time   :<input type = "time" name = "instarttime" value = "" width = "200"><br>
+        End Time     :<input type = "time" name = "inendtime" value = "" width = "200"><br>
+        Select Day/s :<select id="day" name="inday">
+                            <option value="MW">MW</option>
+                            <option value="TTH">TTH</option>
+                            <option value="FSA">FSA</option>
+                            <option value="MON">MON</option>
+                            <option value="TUE">TUE</option>
+                            <option value="WED">WED</option>
+                            <option value="THU">THU</option>
+                            <option value="FRI">FRI</option>
+                            <option value="SAT">SAT</option>
+                      </select><br>
+        Room         :<input type = "text" name = "inroom" value = "" width = "200"><br>
+        Teacher ID   :<input type = "text" name = "inteacherid" value = "" width = "200"><br>
+    </pre>
+        <br>
+        <button type="submit">Add</button>
+    </form>
+    <br>
+    <span><a href = "{% url 'adminrooms' %}">Rooms</a></span><br>
+    <span><a href = "{% url 'admincourses' %}">Courses</a></span><br>
+    <span><a href = "{% url 'admin:index' %}" target="_blank">Admin Hub</a></span><br>
+    <br>
+    <span><a href = "{% url 'logout' %}">Logout</a></span>
+</body>
+</html>
