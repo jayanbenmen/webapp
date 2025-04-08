@@ -7,8 +7,6 @@
 <body>
     {% if user.is_authenticated %}
         <p>Welcome, Admin {{ user.first_name }}!</p>
-    {% else %}
-        <p>Welcome, Guest!</p>
     {% endif %}
 
     <span><a href = "{% url 'adminrooms' %}">Rooms</a></span><br>

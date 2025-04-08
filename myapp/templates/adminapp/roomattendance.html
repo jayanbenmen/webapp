@@ -5,11 +5,57 @@
     <title>{{room.room_name}} Room Log</title>
 </head>
 <body>
-    <h1>Daily Room Log for {{room.room_name}}</h1><br>
-    <span><a href = "{% url 'adminrooms' %}">Rooms</a></span><br>
-    <span><a href = "{% url 'admincourses' %}">Courses</a></span><br>
-    <span><a href = "{% url 'admin:index' %}" target="_blank">Admin Hub</a></span><br>
+    <h1>Room Log for {{room.room_name}}</h1><br>
+    <form method="post" id="date-form">
+        {% csrf_token %}  
+        {{ form }} 
+    </form>
+    {% if log_records %}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Time</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in log_records %}
+            <tr>
+                <td>{{ record.day_date }}</td>
+                <td>
+                    {% if record.student %}
+                        {{record.student.first_name}} {{record.student.last_name}}
+                    {% elif record.teacher %}  
+                        {{record.teacher.first_name}} {{record.teacher.last_name}}
+                    {% endif %}
+                </td>
+                <td>{{ record.time_log }}</td>
+                <td>{{ record.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <div>No room log records at the moment</div>
+    {% endif %}
+    <a href="{% url 'monthly_room_logs' room.room_id %}?day_date={{ form.cleaned_data.day_date|date:'Y-m-d' }}">Download Monthly Logs</a>
     <br>
+    <br>
+    <span><a href = "{% url 'admin:index' %}" target="_blank">Admin Hub</a></span><br>
+    <span><a href = "{% url 'admincourses' %}">Courses</a></span><br>
+    <span><a href = "{% url 'adminrooms' %}">Rooms</a></span><br>
+    <span><a href = "{% url 'nfcuid' %}">NFC UID</a></span><br>
+    <br>
+    
     <span><a href = "{% url 'logout' %}">Logout</a></span>
 </body>
 </html>
+
+<script>
+    // Add an event listener to the month select field to submit the form when changed
+    document.getElementById('id_day_date').addEventListener('change', function() {
+        document.getElementById('date-form').submit();  // Automatically submit the form
+    });
+</script>

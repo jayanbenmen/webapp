@@ -19,21 +19,59 @@
     {% endfor %}
     {% endif %}
 
-    <h1>Course Deletion</h1>
-    <form name="register" method="post" novalidate action="">
-        {% csrf_token %}
-    <pre>
-        Course Code  :<input type = "text" name = "incoursecode" value = "" width = "200"><br>
-        Section      :<input type = "text" name = "insection" value = "" width = "200"><br>
-    </pre>
-        <br>
-        <button type="submit">Delete</button>
-    </form>
+    <h2>Course Deletion</h2>
+    {% if courses %}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Course Code</th>
+                <th>Section</th>
+                <th>Course Title</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for course in courses %}
+            <tr>
+                <td>{{ course.course_code }}</td>
+                <td>{{ course.section }}</td>
+                <td>{{ course.course_title }}</td>
+                <td>
+                    <form method="post" action="{% url 'deletecoursebutton' course.course_id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger" onclick="return confirmDelete('{{ course.course_code }} {{ course.section }}');">
+                            Delete
+                        </button>
+                    </form> 
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <div>No course available</div>
+    {% endif %}
     <br>
-    <span><a href = "{% url 'adminrooms' %}">Rooms</a></span><br>
-    <span><a href = "{% url 'admincourses' %}">Courses</a></span><br>
-    <span><a href = "{% url 'admin:index' %}" target="_blank">Admin Hub</a></span><br>
-    <br>
-    <span><a href = "{% url 'logout' %}">Logout</a></span>
+    {% comment %} <ul>
+        {% for course in courses %}
+            <li>
+                <a href="{% url 'courseattendance' course.course_id %}">{{ course.course_code }} {{ course.section }}</a>
+                <form method="post" action="{% url 'deletecoursebutton' course.course_id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger" onclick="return confirmDelete('{{ course.course_code }} {{ course.section }}');">
+                        Delete
+                    </button>
+                </form>
+            </li>
+        {% empty %}
+            <li>No courses available.</li>
+        {% endfor %}
+    </ul><br> {% endcomment %}
+
+    <script>
+        function confirmDelete(course_details) {
+            return confirm("Are you sure you want to delete course " + course_details + "?");
+        }
+    </script>
 </body>
 </html>

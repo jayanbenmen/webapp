@@ -5,18 +5,12 @@
     <title>Add a Room</title>
 </head>
 <body>
-    <h1>Room Registration</h1>
-    <form name="register" method="post" novalidate action="">
+    <form name="register" novalidate hx-post="{% url 'addroom' %}" class = "forms">
+        <h2>Room Registration</h2>
         {% csrf_token %}
-        Room Name :<input type = "text" name = "inroomname" value = "" width = "200"><br>
+        Room Name: <input type = "text" name = "inroomname" value = "" width = "200"><br>
         <br>
         <button type="submit">Add</button>
     </form>
-    <br>
-    <span><a href = "{% url 'adminrooms' %}">Rooms</a></span><br>
-    <span><a href = "{% url 'admincourses' %}">Courses</a></span><br>
-    <span><a href = "{% url 'admin:index' %}" target="_blank">Admin Hub</a></span><br>
-    <br>
-    <span><a href = "{% url 'logout' %}">Logout</a></span>
 </body>
 </html>

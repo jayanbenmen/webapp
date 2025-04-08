@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ course.course_title }} {{ course.section }} Student Attendance</title>
+</head>
+<body>
+    <h1>Record Manually for for {{ course.course_title }} {{ course.section }}</h1>
+    <p>{{ course.schedule_day }} {{ course.start_time }} - {{ course.end_time }}</p>
+    <p>{{ course.room.room_name }}</p>
+    <p>Today's date is: {{ current_date }}</p>
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == "error" %}
+    <div class="alert alert-danger" role="alert">
+      {{ message }}
+    </div>
+    {% else %}
+    <div class="alert alert-success" role="alert">
+      {{ message }}
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    {% if students %}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ student.first_name }} {{ student.last_name }}</td>
+                <form method = "post">
+                {% csrf_token %}
+                    <td>
+                        <select id = "status" name = "instatus">
+                            <option value = "On Time">On Time</option>
+                            <option value = "Late">Late</option>
+                            <option value = "Absent">Absent</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type = "submit" value = "Submit" width = "300" height = "100">
+                    </td>
+                    <input type="hidden" name="instudentid" value="{{ student.student_id }}">
+                </form>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <div>No enrolled students at the moment.</div>
+    {% endif %}
+    <br>
+    <span><a href = "{% url 'teacherhome' %}">Home</a></span><br>
+    <span><a href="{% url 'teacher_courses' %}">Courses</a></span><br>
+    <span><a href="{% url 'teacher_profile' %}">User Profile</a></span><br>
+    <br>
+    <span><a href="{% url 'logout' %}">Logout</a></span><br>
+</body>
+</html>
+<script>
+    // Add an event listener to the month select field to submit the form when changed
+    document.addEventListener('change', function() {
+        document.getElementById('date-form').submit();  // Automatically submit the form
+    });
+</script>

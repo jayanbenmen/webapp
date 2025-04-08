@@ -2,23 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ADNU Attendance</title>
+    <title>Login Page</title>
 </head>
 <body>
     <center>
-        <form name = "role" method = "post" action = "{% url 'role_redirect' %}">
-            {% csrf_token %}
-        <h1>Welcome!</h1>
-                <label for = "usertype">Select your role before registration:</label><br>
-                <br>
-                <select id = "usertype" name = "inusertype">
-                      <option value = "student">Student</option>
-                      <option value = "teacher">Teacher</option>
-                      <option value = "admin">Admin</option>
-                </select><br>
-                <br>
-                <input type = "submit" name = "reg" value = "Submit" width = "300" height = "100">
-        </form>
+      <h1>ADNU Attendance</h1>
+        {% for message in messages %}
+            <p id = "messages">{{message}}</p>
+        {% endfor %}
+      <form method = "post" action = "">
+          {% csrf_token %}
+
+            <input type="text" name="username" placeholder="ID Number..." class="form-control"><br>
+            <input type="password" name="password" placeholder="Password..." class="form-control"><br>
+            <br>
+            <button type = "submit">Sign In</button>
+            <br>
+            No account? <a href="{% url 'initial' %}">Click to Start Registration</a>
+    </form>
     </center>
 </body>
 </html>

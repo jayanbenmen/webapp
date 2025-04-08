@@ -5,31 +5,66 @@
     <title>Drop a Student</title>
 </head>
 <body>
-    {% if messages %}
-    {% for message in messages %}
-    {% if message.tags == "error" %}
-    <div class="alert alert-danger" role="alert">
-        {{ message }}
-    </div>
-    {% else %}
-    <div class="alert alert-success" role="alert">
-      {{ message }}
-    </div>
-    {% endif %}
-    {% endfor %}
-    {% endif %}
-    <h1>Student Dropping for {{course.course_title}} {{ course.section }}</h1><br>
-    <form name="register" method="post" novalidate action="">
+    <h1>Student Dropping for {{course.course_title}} {{ course.section }}</h1>
+    <form id="studentForm" name="register" novalidate hx-post = "{% url 'deletestudent' course.course_id %}" hx-trigger="submit" hx-target="body" class = "forms">
         {% csrf_token %}
-        Student ID :<input type = "text" name = "instudentid" value = "" width = "200"><br>
+        {% if enrolled_students %}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID Number</th>
+                    <th>Name</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in enrolled_students %}
+                <tr>
+                    <td>{{ student.student_id }}</td>
+                    <td>{{ student.first_name }} {{ student.last_name }}</td>
+                    <td><input type="checkbox" name="instudentid" value="{{ student.student_id }}" id="student-{{ student.student_id }}" /></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <div>No enrolled student</div>
+        {% endif %}
         <br>
-        <button type="submit">Drop Student</button>
+        {% comment %} <ul>
+            {% for student in enrolled_students %}
+                <li>
+                    {{ student.student_id }} {{ student.first_name }} {{ student.last_name }}
+                    <input type="checkbox" name="instudentid" value="{{ student.student_id }}" id="student-{{ student.student_id }}" />
+                </li>
+            {% empty %}
+                <li>No enrolled student.</li>
+            {% endfor %}
+        </ul> {% endcomment %}
+        <button type="button" class="btn btn-danger" id="dropStudentsBtn" onclick="confirmDropStudents()">Drop Selected Student/s</button>
     </form>
-    <br>
-    <span><a href = "{% url 'adminrooms' %}">Rooms</a></span><br>
-    <span><a href = "{% url 'admincourses' %}">Courses</a></span><br>
-    <span><a href = "{% url 'admin:index' %}" target="_blank">Admin Hub</a></span><br>
-    <br>
-    <span><a href = "{% url 'logout' %}">Logout</a></span>
+
+    <script>
+        function confirmDropStudents() {
+            var selectedStudents = Array.from(document.querySelectorAll('input[name="instudentid"]:checked')).map(cb => cb.value);
+
+            if (selectedStudents.length === 0) {
+                alert("Please select at least one student.");
+                return;
+            }
+
+            var confirmation = confirm("Are you sure you want to drop " + selectedStudents.length + " student/s?");
+            if (!confirmation) return;
+
+            var form = document.getElementById("studentForm");
+            var submitBtn = document.getElementById("dropStudentsBtn");
+
+            // Disable button & show loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Dropping...";
+
+            form.requestSubmit(); // Let HTMX handle submission
+        }
+    </script>
 </body>
 </html>

@@ -3,25 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <title>Courses</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 </head>
 <body>
     <h1>Courses</h1>
-    <ul>
-        {% for course in courses %}
-            <li>
-                <a href="{% url 'courseattendance' course.course_id %}">{{ course.course_code }} {{ course.section }}</a>
-            </li>
-        {% empty %}
-            <li>No courses available.</li>
-        {% endfor %}
-    </ul><br>
-    <span><a href = "{% url 'addcourse' %}">Add a Course</a></span><br>
-    <span><a href = "{% url 'deletecourse' %}">Delete a Course</a></span><br>
+    {% if courses %}
+        <ul>
+            {% for course in courses %}
+                <li>
+                    <a href="{% url 'courseattendance' course.course_id %}">
+                        {{ course.course_code }} {{ course.section }} 
+                        {{ course.course_title }} </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div>No courses available.</div>
+    {% endif %}
+
+    <button class="btn" onclick="add_course_modal.showModal()"
+        hx-get = "{% url 'addcourse' %}"
+        hx-target = "#add_course_content"
+        hx-trigger = "click">
+        Add a Course
+    </button>
+
+    <button class="btn" onclick="delete_course_modal.showModal()"
+        hx-get = "{% url 'deletecourse' %}"
+        hx-target = "#delete_course_content"
+        hx-trigger = "click">
+        Delete a Course
+    </button><br>
+
     <br>
-    <span><a href = "{% url 'adminrooms' %}">Rooms</a></span><br>
-    <span><a href = "{% url 'admincourses' %}">Courses</a></span><br>
     <span><a href = "{% url 'admin:index' %}" target="_blank">Admin Hub</a></span><br>
+    <span><a href = "{% url 'admincourses' %}">Courses</a></span><br>
+    <span><a href = "{% url 'adminrooms' %}">Rooms</a></span><br>
+    <span><a href = "{% url 'nfcuid' %}">NFC UID</a></span><br>
     <br>
+
     <span><a href = "{% url 'logout' %}">Logout</a></span>
+
+<!-- Open the modal using ID.showModal() method -->
+    <dialog id="add_course_modal" class="modal">
+        <div id = "add_course_content" class="modal-box">
+    
+        </div>
+        <form method="dialog" class="modal-backdrop">
+        
+        </form>
+    </dialog>
+
+<!-- Open the modal using ID.showModal() method -->
+    <dialog id="delete_course_modal" class="modal">
+        <div id = "delete_course_content" class="modal-box">
+
+        </div>
+        <form method="dialog" class="modal-backdrop">
+        
+        </form>
+    </dialog>
+
+  {% block page_js %}
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Select all modals
+      const modals = document.querySelectorAll(".modal");
+  
+      modals.forEach((modal) => {
+        modal.addEventListener("click", function (event) {
+          // Check if clicked target is NOT inside the modal-box
+          if (!event.target.closest(".modal-box")) {
+            modal.close(); // Close only the clicked modal
+          }
+        });
+      });
+    });
+  </script>
+  
+  <script>
+      document.addEventListener("htmx:beforeSwap", function (e) {
+          if (e.detail.target.classList.contains("forms") && !e.detail.xhr.response){
+              location.reload();
+          }
+      })
+  </script>
+  {% endblock %}
 </body>
 </html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{course.course_title}} {{ course.section }} Teacher Attendance</title>
+</head>
+<body>
+    <h1>Your Attendance for {{ course.course_title }} {{ course.section }}</h1>
+    <p>{{ course.schedule_day }} {{ course.start_time }} - {{ course.end_time }}</p>
+    <p>{{ course.room.room_name }}</p>
+
+    {% if records %}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Time-in</th>
+                <th>Time-out</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+            <tr>
+                <td>{{ record.day_date }}</td>
+                <td>{{ record.time_in }}</td>
+                <td>{{ record.time_out }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    {% else %}
+        <div>No attendance record at the moment</div>
+    {% endif %}
+    <br>
+    <span><a href = "{% url 'teacherhome' %}">Home</a></span><br>
+    <span><a href = "{% url 'teacher_courses' %}">Courses</a></span><br>
+    <span><a href = "{% url 'teacher_profile' %}">User Profile</a></span><br>
+    <br>
+    <span><a href = "{% url 'logout' %}">Logout</a></span><br>
+</body>
+</html>

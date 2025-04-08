@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Teacher NFC</title>
+</head>
+<body>
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == "error" %}
+    <div class="alert alert-danger" role="alert">
+      {{ message }}
+    </div>
+    {% else %}
+    <div class="alert alert-success" role="alert">
+      {{ message }}
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    <form id="teacherForm" name="register" novalidate hx-post = "{% url 'updteachernfc' teacher.teacher_id %}" class = "forms">
+        {% csrf_token %}
+        <h3>Update NFC UID of {{teacher.first_name}} {{teacher.last_name}}</h3>
+        {{ teacher.teacher_id }} {{ teacher.first_name }} {{ teacher.last_name }}
+        <input type="text" name="inteachernfc" value="" id="nfc_{{ teacher.teacher_id }}"/>
+        <button type="submit" >Update</button>
+    </form>
+</body>
+</html>

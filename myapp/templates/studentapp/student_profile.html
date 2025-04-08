@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<body>
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == "error" %}
+    <div class="alert alert-danger" role="alert">
+      {{ message }}
+    </div>
+    {% else %}
+    <div class="alert alert-success" role="alert">
+      {{ message }}
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    <h1>Your Profile</h1>
+    <div>User ID: {{ user.id }}</div><br>
+    <div>ID Number: {{ student.student_id }}</div><br>
+    <div>Name: {{ user.first_name }} {{ user.last_name }}</div><br>
+    <div>
+        NFC UID: {{ student.nfc_uid }} <a href = "{% url 'student_nfcupd' %}">Update NFC UID</a>
+    </div><br>
+    <div>
+        Password: ******** <a href = "{% url 'change-password' %}">Change Password</a>
+    </div>
+    <br>
+    <span><a href = "{% url 'studenthome' %}">Home</a></span><br>
+    <span><a href = "{% url 'student_courses' %}">Courses</a></span><br>
+    <span><a href = "{% url 'student_profile' %}">User Profile</a></span><br>
+    <br>
+    <span><a href = "{% url 'logout' %}">Logout</a></span><br>
+
+</body>
+</html>

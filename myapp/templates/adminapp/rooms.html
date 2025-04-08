@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Rooms</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
 </head>
 <body>
     <h1>Rooms</h1>
@@ -14,14 +16,76 @@
         {% empty %}
             <li>No rooms available.</li>
         {% endfor %}
-    </ul><br>
-    <span><a href = "{% url 'addroom' %}">Add a Room</a></span><br>
-    <span><a href = "{% url 'deleteroom' %}">Delete a Room</a></span><br>
+    </ul>
+
+    <button class="btn" onclick="add_room_modal.showModal()"
+        hx-get = "{% url 'addroom' %}"
+        hx-target = "#add_room_content"
+        hx-trigger = "click">
+        Add a Room
+    </button>
+
+    <button class="btn" onclick="delete_room_modal.showModal()"
+        hx-get = "{% url 'deleteroom' %}"
+        hx-target = "#delete_room_content"
+        hx-trigger = "click">
+        Delete a Room
+    </button>
+
     <br>
-    <span><a href = "{% url 'adminrooms' %}">Rooms</a></span><br>
-    <span><a href = "{% url 'admincourses' %}">Courses</a></span><br>
+    <br>
     <span><a href = "{% url 'admin:index' %}" target="_blank">Admin Hub</a></span><br>
+    <span><a href = "{% url 'admincourses' %}">Courses</a></span><br>
+    <span><a href = "{% url 'adminrooms' %}">Rooms</a></span><br>
+    <span><a href = "{% url 'nfcuid' %}">NFC UID</a></span><br>
     <br>
+    
     <span><a href = "{% url 'logout' %}">Logout</a></span>
-</body>
+
+<!-- Open the modal using ID.showModal() method -->
+<dialog id="add_room_modal" class="modal">
+  <div id = "add_room_content" class="modal-box">
+
+  </div>
+  <form method="dialog" class="modal-backdrop">
+  
+  </form>
+</dialog>
+
+<!-- Open the modal using ID.showModal() method -->
+<dialog id="delete_room_modal" class="modal">
+  <div id = "delete_room_content" class="modal-box">
+
+  </div>
+  <form method="dialog" class="modal-backdrop">
+  
+  </form>
+</dialog>
+
+{% block page_js %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Select all modals
+    const modals = document.querySelectorAll(".modal");
+
+    modals.forEach((modal) => {
+      modal.addEventListener("click", function (event) {
+        // Check if clicked target is NOT inside the modal-box
+        if (!event.target.closest(".modal-box")) {
+          modal.close(); // Close only the clicked modal
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+    document.addEventListener("htmx:beforeSwap", function (e) {
+        if (e.detail.target.classList.contains("forms") && !e.detail.xhr.response){
+            location.reload();
+        }
+    })
+</script>
+{% endblock %}
+
 </html>

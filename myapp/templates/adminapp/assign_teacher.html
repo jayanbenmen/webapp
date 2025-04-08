@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{course.course_title}} {{ course.section }} Attendance</title>
+</head>
+<body>
+    <h1>Assign a Teacher for {{ course.course_title }} {{ course.section }}</h1>
+    <p>{{ course.schedule_day }} {{ course.start_time }} - {{ course.end_time }}</p>
+    <p>{{ course.room.room_name }}</p>
+    
+    <form id = "assign_form" method = "POST">
+        {% csrf_token %}
+        {% if teachers %}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID Number</th>
+                    <th>Name</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for teacher in teachers %}
+                <tr>
+                    <td>{{ teacher.teacher_id }}</td>
+                    <td>{{ teacher.first_name }} {{ teacher.last_name }}</td>
+                    <td><input type="radio" name="inteacherid" value="{{ teacher.teacher_id }}" id="teacher-{{ teacher.teacher_id }}" /></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <div>No registered teachers</div>
+        {% endif %}
+        <br>
+        <button type="button" class="btn btn-success" id="assignTeacherBtn" onclick="confirmAssignment()">Assign Teacher</button>
+    </form>
+
+    <br>
+    <br>
+    <span><a href = "{% url 'admin:index' %}" target="_blank">Admin Hub</a></span><br>
+    <span><a href = "{% url 'admincourses' %}">Courses</a></span><br>
+    <span><a href = "{% url 'adminrooms' %}">Rooms</a></span><br>
+    <span><a href = "{% url 'nfcuid' %}">NFC UID</a></span><br>
+    <br>
+    
+    <span><a href = "{% url 'logout' %}">Logout</a></span>
+</body>
+</html>
+
+<script type="text/javascript">
+    function confirmAssignment() {
+        var assigned_teacher = document.querySelector('input[name = "inteacherid"]:checked');
+
+        if(!assigned_teacher){
+            alert("Please select a teacher to assign.")
+            return false;
+        }
+
+        // Display a confirmation dialog
+        var userConfirmation = confirm("Are you sure you want to assign this teacher?");
+        
+        // If the user confirms, submit the form
+        if (userConfirmation) {
+            document.getElementById("assign_form").submit();  // Submit the form
+        }
+        // If the user cancels, do nothing (form won't be submitted)
+        else {
+            return false;
+        }
+    }
+</script>

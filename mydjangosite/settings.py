@@ -84,6 +84,7 @@ DATABASES = {
     }
 }
 """
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -91,6 +92,19 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': '021302021302',
         'HOST': '127.0.0.1',
+        'PORT': '3306'
+    }
+}
+"""
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'attendance_test',
+        'USER': 'django',
+        'PASSWORD': '021302021302',
+        'HOST': 'remote-db.c1sy8q42a99j.ap-southeast-1.rds.amazonaws.com',
         'PORT': '3306'
     }
 }

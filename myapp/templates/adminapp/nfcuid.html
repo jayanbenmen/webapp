@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User NFC UID</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+</head>
+<body>
+    <h1>Teachers NFC UIDs</h1>
+    {% if teachers %}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID Number</th>
+                <th>Name</th>
+                <th>NFC UID</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for teacher in teachers %}
+            <tr>
+                <td>{{ teacher.teacher_id }}</td>
+                <td>{{ teacher.first_name }} {{ teacher.last_name }}</td>
+                <td>{{ teacher.nfc_uid }}</td>
+                <td>
+                    <button class="btn" onclick="upd_teacher_modal.showModal()"
+                        hx-get = "{% url 'updteachernfc' teacher.teacher_id %}"
+                        hx-target = "#upd_teacher_content"
+                        hx-trigger = "click">
+                        Update 
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <div>No registered teachers at the moment.</div>
+    {% endif %}
+
+    <h1>Students NFC UIDs</h1>
+    {% if students %}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID Number</th>
+                <th>Name</th>
+                <th>NFC UID</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ student.student_id }}</td>
+                <td>{{ student.first_name }} {{ student.last_name }}</td>
+                <td>{{ student.nfc_uid }}</td>
+                <td>
+                    <button class="btn" onclick="upd_student_modal.showModal()"
+                        hx-get = "{% url 'updstudentnfc' student.student_id %}"
+                        hx-target = "#upd_student_content"
+                        hx-trigger = "click">
+                        Update 
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <div>No registered students at the moment</div>
+    {% endif %}
+
+    <br>
+    <span><a href = "{% url 'admin:index' %}" target="_blank">Admin Hub</a></span><br>
+    <span><a href = "{% url 'admincourses' %}">Courses</a></span><br>
+    <span><a href = "{% url 'adminrooms' %}">Rooms</a></span><br>
+    <span><a href = "{% url 'nfcuid' %}">NFC UID</a></span><br>
+    <br>
+    
+    <span><a href = "{% url 'logout' %}">Logout</a></span>
+
+<!-- Open the modal using ID.showModal() method -->
+    <dialog id="upd_teacher_modal" class="modal">
+        <div id = "upd_teacher_content" class="modal-box">
+    
+        </div>
+        <form method="dialog" class="modal-backdrop">
+        
+        </form>
+    </dialog>
+
+<!-- Open the modal using ID.showModal() method -->
+    <dialog id="upd_student_modal" class="modal">
+        <div id = "upd_student_content" class="modal-box">
+
+        </div>
+        <form method="dialog" class="modal-backdrop">
+        
+        </form>
+    </dialog>
+
+  {% block page_js %}
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Select all modals
+      const modals = document.querySelectorAll(".modal");
+  
+      modals.forEach((modal) => {
+        modal.addEventListener("click", function (event) {
+          // Check if clicked target is NOT inside the modal-box
+          if (!event.target.closest(".modal-box")) {
+            modal.close(); // Close only the clicked modal
+          }
+        });
+      });
+    });
+  </script>
+  
+  <script>
+      document.addEventListener("htmx:beforeSwap", function (e) {
+          if (e.detail.target.classList.contains("forms") && !e.detail.xhr.response){
+              location.reload();
+          }
+      })
+  </script>
+  {% endblock %}
+</body>
+</html>

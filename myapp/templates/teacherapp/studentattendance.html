@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ course.course_title }} {{ course.section }} Student Attendance</title>
+</head>
+<body>
+    <h1>Students Attendance for {{ course.course_title }} {{ course.section }}</h1>
+    <p>{{ course.schedule_day }} {{ course.start_time }} - {{ course.end_time }}</p>
+    <p>{{ course.room.room_name }}</p>
+
+    <form method="post" id="date-form">
+        {% csrf_token %}  
+        {{ form }} 
+    </form>
+    {% if students %}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Time-in</th>
+                <th>Time-out</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ student.first_name }} {{ student.last_name }}</td>
+        
+                {% if student.attendance %}
+                    <td>{{ student.attendance.time_in }}</td>
+                    <td>{{ student.attendance.time_out }}</td>
+                    <td>{{ student.attendance.status }}</td>
+                {% else %}
+                    <td></td>
+                    <td></td>
+                    <td>No Record</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <div>No enrolled students at the moment.</div>
+    {% endif %}
+    <span><a href="{% url 'teacherattendance' course.course_id %}">View Your Attendance</a></span>
+    <span><a href="{% url 'teacher_classlist' course.course_id %}">Class List</a></span>
+    <span><a href="{% url 'students_monthly_attendance' course.course_id %}?day_date={{ form.cleaned_data.day_date|date:'Y-m-d' }}">Download</a></span>
+    <span><a href="{% url 'manual_attendance' course.course_id %}">Manual Record</a></span>
+    <br>
+    <br>
+    <span><a href = "{% url 'teacherhome' %}">Home</a></span><br>
+    <span><a href="{% url 'teacher_courses' %}">Courses</a></span><br>
+    <span><a href="{% url 'teacher_profile' %}">User Profile</a></span><br>
+    <br>
+    <span><a href="{% url 'logout' %}">Logout</a></span><br>
+</body>
+</html>
+<script>
+    // Add an event listener to the month select field to submit the form when changed
+    document.addEventListener('change', function() {
+        document.getElementById('date-form').submit();  // Automatically submit the form
+    });
+</script>

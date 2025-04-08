@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Student NFC</title>
+</head>
+<body>
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == "error" %}
+    <div class="alert alert-danger" role="alert">
+      {{ message }}
+    </div>
+    {% else %}
+    <div class="alert alert-success" role="alert">
+      {{ message }}
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    <h1>Update NFC UID of {{teacher.first_name}} {{teacher.last_name}}</h1>
+    <form method = "post">
+        {% csrf_token %}
+        <input type= "text" name= "inteachernfc" value=""/>
+        <button type= "submit" >Update</button>
+    </form>
+    <br>
+    <span><a href = "{% url 'teacherhome' %}">Home</a></span><br>
+    <span><a href = "{% url 'teacher_courses' %}">Courses</a></span><br>
+    <span><a href = "{% url 'teacher_profile' %}">User Profile</a></span><br>
+    <br>
+    <span><a href = "{% url 'logout' %}">Logout</a></span><br>
+</body>
+</html>

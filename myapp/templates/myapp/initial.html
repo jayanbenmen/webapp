@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ADNU Attendance</title>
+</head>
+<body>
+    <center>
+        <form name = "role" method = "post" action = "{% url 'role_redirect' %}">
+            {% csrf_token %}
+        <h1>Welcome!</h1>
+                <label for = "usertype">Select your role before registration:</label><br>
+                <br>
+                <select id = "usertype" name = "inusertype">
+                      <option value = "student">Student</option>
+                      <option value = "teacher">Teacher</option>
+                      <option value = "admin">Admin</option>
+                </select><br>
+                <br>
+                <input type = "submit" name = "reg" value = "Submit" width = "300" height = "100">
+        </form>
+    </center>
+
+</body>
+</html>

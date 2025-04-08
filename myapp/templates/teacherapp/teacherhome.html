@@ -5,11 +5,63 @@
     <title>Home</title>
 </head>
 <body>
+    <h1>Home</h1>
     {% if user.is_authenticated %}
         <p>Welcome, {{ user.first_name }}!</p>
     {% else %}
         <p>Welcome, Guest!</p>
     {% endif %}
-    <span><a href = "{% url 'logout' %}">Logout</a></span>
+
+    <form method="post" id="calendar-form">
+        {% csrf_token %}  
+        {{ form }} 
+    </form>
+    {% if courses %}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Courses</th>
+                {% for date in dates %}
+                    <th>{{ date|date:"d" }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for course in courses %}
+            <tr>
+                <td>{{ course.course_code }}</td> 
+
+                {% for date in dates %}
+                    <td>
+                        {% with formatted_date=date|date:"Y-m-d" %}
+                            {% for record in attendance_data %}
+                                {% if record.course_id == course.course_id and record.date == formatted_date %}
+                                    {{ record.status }} 
+                                {% endif %}
+                            {% endfor %}
+                        {% endwith %}
+                    </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    {% else %}
+        <div>No courses assigned at the moment.</div>
+    {% endif %}
+    <br>
+    <span><a href = "{% url 'teacherhome' %}">Home</a></span><br>
+    <span><a href = "{% url 'teacher_courses' %}">Courses</a></span><br>
+    <span><a href = "{% url 'teacher_profile' %}">User Profile</a></span><br>
+    <br>
+    <span><a href = "{% url 'logout' %}">Logout</a></span><br>
 </body>
 </html>
+
+<script>
+    // Add an event listener to the month select field to submit the form when changed
+    document.addEventListener('change', function() {
+        document.getElementById('calendar-form').submit();  // Automatically submit the form
+    });
+</script>

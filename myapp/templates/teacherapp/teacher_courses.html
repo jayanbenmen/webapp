@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Courses</title>
+</head>
+<body>
+    <h1>Courses</h1>
+    {% if user.is_authenticated %}
+        <p>Welcome, {{ user.first_name }}!</p>
+    {% else %}
+        <p>Welcome, Guest!</p>
+    {% endif %}
+    {% if courses %}
+        <ul>
+            {% for course in courses %}
+            <li>
+                <a href="{% url 'studentattendance' course.course_id %}">
+                    {{ course.course_code }} {{ course.section }} 
+                    {{ course.course_title }} 
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div>No courses assigned to you.</div>
+    {% endif %}
+    <br>
+    <span><a href = "{% url 'teacherhome' %}">Home</a></span><br>
+    <span><a href = "{% url 'teacher_courses' %}">Courses</a></span><br>
+    <span><a href = "{% url 'teacher_profile' %}">User Profile</a></span><br>
+    <br>
+    <span><a href = "{% url 'logout' %}">Logout</a></span><br>
+
+</body>
+</html>

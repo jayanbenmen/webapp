@@ -1,7 +1,10 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+import calendar
+from datetime import datetime
+
 
 class CustomUserCreationForm(UserCreationForm):
     username = forms.CharField(
@@ -78,4 +81,19 @@ class AdminCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
+
+class PasswordChangingForm(PasswordChangeForm):
+    old_password = forms.CharField(widget = forms.PasswordInput(), label = "Old Password:")
+    new_password1 = forms.CharField(widget = forms.PasswordInput(), label = "New Password:")
+    new_password2 = forms.CharField(widget = forms.PasswordInput(), label = "Confirm New Password:")
+
+    class Meta:
+        model = User
+        fields = ('old_password', 'new_password1', 'new_password2')
+
+class CalendarForm(forms.Form):
+    month = forms.ChoiceField(choices=[(str(i), calendar.month_name[i]) for i in range(1, 13)], initial=str(datetime.now().month), label='Month')
+
+class DateForm(forms.Form):
+    day_date = forms.DateField(widget = forms.DateInput(attrs = {'type': 'date'}), label = "Date")
 
